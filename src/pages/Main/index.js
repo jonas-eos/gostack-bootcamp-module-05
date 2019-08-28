@@ -1,7 +1,17 @@
 import React from 'react';
 
-// import { Container } from './styles';
+import { Title } from './styles';
 
 export default function Main() {
-  return <h1>Main</h1>;
+  return (
+    <>
+      <Title>
+        <small>Small</small>
+        Main
+      </Title>
+
+      {/* Tittle with error value sample */}
+      <Title error>Error main!</Title>
+    </>
+  );
 }
