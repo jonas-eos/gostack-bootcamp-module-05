@@ -15,6 +15,30 @@ export default class Main extends Component {
   };
 
   /**
+   * Load datas from localStorage.
+   */
+  componentDidMount() {
+    const repositories = localStorage.getItem('repositories');
+
+    if (repositories) {
+      this.setState({
+        repositories: JSON.parse(repositories),
+      });
+    }
+  }
+
+  /**
+   * Save datas on localStorage.
+   */
+  componentDidUpdate(_, prevState) {
+    const { repositories } = this.state;
+
+    if (prevState.repositories !== repositories) {
+      localStorage.setItem('repositories', JSON.stringify(repositories));
+    }
+  }
+
+  /**
    * Input Handler:
    * This handle attr values to state.newRepo
    */
