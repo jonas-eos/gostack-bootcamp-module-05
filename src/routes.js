@@ -13,7 +13,7 @@ export default function Routes() {
       {/* Guarantee that a single route is called at a time. */}
       <Switch>
         <Route path="/" exact component={Main} />
-        <Route path="/repository" component={Repository} />
+        <Route path="/repository/:repository" component={Repository} />
       </Switch>
     </BrowserRouter>
   );
