@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import api from '../../services/api';
 
+import api from '../../services/api';
 import Container from '../../components/Container';
-import { Loading, Owner } from './styles';
+import { Loading, Owner, IssueList } from './styles';
 
 export default class Repository extends Component {
   // State values.
@@ -22,6 +22,7 @@ export default class Repository extends Component {
 
     const repoName = decodeURIComponent(match.params.repository);
 
+    // Gets repos data and issues data from API URI.
     const [repository, issues] = await Promise.all([
       api.get(`/repos/${repoName}`),
       api.get(`/repos/${repoName}/issues`),
@@ -32,6 +33,8 @@ export default class Repository extends Component {
         },
       },
     ]);
+
+    // Set local state with API values.
     this.setState({
       repository: repository.data,
       issues: issues.data,
@@ -48,10 +51,32 @@ export default class Repository extends Component {
       <Container>
         <Owner>
           <Link to="/">Back to the repositories</Link>
+
+          {/* Repo owner + repo descriptions */}
           <img src={repository.owner.avatar_url} alt={repository.owner.login} />
           <h1>{repository.name}</h1>
           <p>{repository.description}</p>
         </Owner>
+        <IssueList>
+          {issues.map(issue => (
+            <li key={String(issue.id)}>
+              {/* Avatar image */}
+              <img src={issue.user.avatar_url} alt={issue.user.login} />
+              <div>
+                <strong>
+                  {/* Issue link + title */}
+                  <a href={issue.html_url}>{issue.title}</a>
+                  {issue.labels.map(label => (
+                    // Issue Label
+                    <span key={String(label.id)}>{label.name}</span>
+                  ))}
+                </strong>
+                {/* Issue user name */}
+                <p>{issue.user.login}</p>
+              </div>
+            </li>
+          ))}
+        </IssueList>
       </Container>
     );
   }
